@@ -24,6 +24,8 @@ const Dashboard = lazy(() => import("./pages/user/Dashboard"));
 const ProfileSettings = lazy(() => import("./pages/user/ProfileSettings"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Unauthorized = lazy(() => import("./pages/Unauthorized"));
+// Debug pages
+const ApiDebug = lazy(() => import("./pages/debug/ApiDebug"));
 
 // Create a query client for React Query with improved error handling
 const queryClient = new QueryClient({
@@ -108,6 +110,9 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
+
+                {/* Debug routes */}
+                <Route path="/debug/api" element={<ApiDebug />} />
 
                 {/* Protected routes - require authentication */}
                 <Route path="/dashboard" element={
