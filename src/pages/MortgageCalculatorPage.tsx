@@ -2,6 +2,8 @@
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import MortgageCalculator from '@/components/mortgage/MortgageCalculator';
+import AffordabilityCalculator from '@/components/mortgage/AffordabilityCalculator';
+import LoanComparison from '@/components/mortgage/LoanComparison';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -11,51 +13,27 @@ const MortgageCalculatorPage = () => {
       <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold mb-2">Mortgage Calculator</h1>
         <p className="text-gray-600 mb-8">Plan your home purchase with our mortgage calculation tools</p>
-        
+
         <Tabs defaultValue="calculator" className="mb-8">
           <TabsList>
             <TabsTrigger value="calculator">Calculator</TabsTrigger>
             <TabsTrigger value="affordability">Affordability</TabsTrigger>
             <TabsTrigger value="comparison">Loan Comparison</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="calculator" className="mt-4">
             <MortgageCalculator />
           </TabsContent>
-          
+
           <TabsContent value="affordability" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Affordability Calculator</CardTitle>
-                <CardDescription>
-                  Determine how much house you can afford based on your income and expenses.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-gray-500 py-12">
-                  Affordability calculator coming soon!
-                </p>
-              </CardContent>
-            </Card>
+            <AffordabilityCalculator />
           </TabsContent>
-          
+
           <TabsContent value="comparison" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Loan Comparison</CardTitle>
-                <CardDescription>
-                  Compare different loan options side by side.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-gray-500 py-12">
-                  Loan comparison tool coming soon!
-                </p>
-              </CardContent>
-            </Card>
+            <LoanComparison />
           </TabsContent>
         </Tabs>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <Card>
             <CardHeader>
@@ -71,7 +49,7 @@ const MortgageCalculatorPage = () => {
               </ul>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Tips for Home Buyers</CardTitle>

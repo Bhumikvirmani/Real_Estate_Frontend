@@ -11,9 +11,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { useApi } from "@/hooks/useApi";
+import { useToast } from "@/hooks/use-toast";
 
 interface MortgageCalculatorProps {
   defaultPrincipal?: number;
+}
+
+interface MortgageCalculationResult {
+  monthlyPayment: number;
+  totalPayment: number;
+  totalInterest: number;
+  amortizationSchedule: Array<{
+    month: number;
+    payment: number;
+    principalPayment: number;
+    interestPayment: number;
+    remainingBalance: number;
+  }>;
 }
 
 const MortgageCalculator = ({ defaultPrincipal = 200000 }: MortgageCalculatorProps) => {
@@ -23,14 +39,18 @@ const MortgageCalculator = ({ defaultPrincipal = 200000 }: MortgageCalculatorPro
   const [monthlyPayment, setMonthlyPayment] = useState(0);
   const [totalPayment, setTotalPayment] = useState(0);
   const [totalInterest, setTotalInterest] = useState(0);
+  const [useServerCalculation, setUseServerCalculation] = useState(false);
 
-  const calculateMortgage = () => {
+  const { toast } = useToast();
+  const { data, loading, error, fetchData } = useApi<{ success: boolean; results: MortgageCalculationResult }>();
+
+  const calculateMortgageLocally = () => {
     // Convert annual interest rate to monthly rate
     const monthlyInterestRate = interestRate / 100 / 12;
-    
+
     // Convert loan term to months
     const loanTermMonths = loanTerm * 12;
-    
+
     // Calculate monthly payment using mortgage formula
     if (monthlyInterestRate === 0) {
       // Simple division if interest rate is zero
@@ -44,17 +64,64 @@ const MortgageCalculator = ({ defaultPrincipal = 200000 }: MortgageCalculatorPro
         (monthlyInterestRate *
           Math.pow(1 + monthlyInterestRate, loanTermMonths)) /
         (Math.pow(1 + monthlyInterestRate, loanTermMonths) - 1);
-      
+
       setMonthlyPayment(payment);
       setTotalPayment(payment * loanTermMonths);
       setTotalInterest(payment * loanTermMonths - principal);
     }
   };
 
+  const calculateMortgageServer = async () => {
+    try {
+      await fetchData({
+        url: '/api/mortgage/calculate',
+        method: 'POST',
+        data: {
+          principal,
+          interestRate,
+          loanTerm
+        }
+      });
+    } catch (err) {
+      console.error('Error calculating mortgage:', err);
+      toast({
+        title: "Calculation Error",
+        description: "Could not calculate mortgage. Using local calculation instead.",
+        variant: "destructive"
+      });
+
+      // Fall back to local calculation
+      calculateMortgageLocally();
+      setUseServerCalculation(false);
+    }
+  };
+
   // Calculate on initial render and when inputs change
   useEffect(() => {
-    calculateMortgage();
-  }, [principal, interestRate, loanTerm]);
+    if (useServerCalculation) {
+      calculateMortgageServer();
+    } else {
+      calculateMortgageLocally();
+    }
+  }, [principal, interestRate, loanTerm, useServerCalculation]);
+
+  // Update state when server data is received
+  useEffect(() => {
+    if (data?.success && data.results) {
+      setMonthlyPayment(data.results.monthlyPayment);
+      setTotalPayment(data.results.totalPayment);
+      setTotalInterest(data.results.totalInterest);
+    }
+  }, [data]);
+
+  // Handle server calculation errors
+  useEffect(() => {
+    if (error) {
+      console.error('Server calculation error:', error);
+      calculateMortgageLocally();
+      setUseServerCalculation(false);
+    }
+  }, [error]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -143,7 +210,35 @@ const MortgageCalculator = ({ defaultPrincipal = 200000 }: MortgageCalculatorPro
           </div>
         </div>
 
-        <Button onClick={calculateMortgage} className="w-full">Recalculate</Button>
+        <Button
+          onClick={() => {
+            if (useServerCalculation) {
+              calculateMortgageServer();
+            } else {
+              calculateMortgageLocally();
+            }
+          }}
+          className="w-full"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Calculating...
+            </>
+          ) : (
+            'Recalculate'
+          )}
+        </Button>
+
+        <div className="mt-2 text-center">
+          <button
+            onClick={() => setUseServerCalculation(!useServerCalculation)}
+            className="text-xs text-blue-600 hover:underline"
+          >
+            {useServerCalculation ? 'Switch to local calculation' : 'Switch to server calculation'}
+          </button>
+        </div>
 
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg">

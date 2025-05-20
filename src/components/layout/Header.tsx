@@ -33,7 +33,7 @@ const Header = () => {
     { name: 'Buy', href: '/properties?status=sale' },
     { name: 'Rent', href: '/properties?status=rent' },
     { name: 'Agents', href: '/agents' },
-    { name: 'Mortgage', href: '/mortgage' },
+    { name: 'Mortgage', href: '/mortgage-calculator' },
   ];
 
   return (
