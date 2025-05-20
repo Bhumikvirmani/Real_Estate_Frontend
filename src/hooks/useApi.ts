@@ -41,7 +41,7 @@ export const useApi = <T = any>() => {
       return import.meta.env.VITE_API_URL;
     }
     // Use production URL as fallback
-    return 'https://real-estate-api.lovable.app';
+    return 'https://real-estate-backend-bq2m.onrender.com';
   }, []);
 
   /**

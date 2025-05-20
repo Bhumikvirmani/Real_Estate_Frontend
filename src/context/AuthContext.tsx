@@ -46,7 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return import.meta.env.VITE_API_URL;
     }
     // Use production URL as fallback
-    return 'https://real-estate-api.lovable.app';
+    return 'https://real-estate-backend-bq2m.onrender.com';
   }, []);
 
   // Enhanced fetch function with better error handling and timeout

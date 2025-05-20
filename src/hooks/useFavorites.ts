@@ -25,7 +25,7 @@ export const useFavorites = (): UseFavoritesResult => {
     try {
       setLoading(true);
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/favorites`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://real-estate-backend-bq2m.onrender.com'}/api/favorites`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -77,7 +77,7 @@ export const useFavorites = (): UseFavoritesResult => {
 
     try {
       const isFav = isFavorite(propertyId);
-      const endpoint = `${import.meta.env.VITE_API_URL || ''}/api/favorites`;
+      const endpoint = `${import.meta.env.VITE_API_URL || 'https://real-estate-backend-bq2m.onrender.com'}/api/favorites`;
       const method = isFav ? 'DELETE' : 'POST';
 
       const response = await fetch(`${endpoint}/${propertyId}`, {

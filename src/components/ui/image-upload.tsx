@@ -44,7 +44,7 @@ export function ImageUpload({
 
     try {
       const formData = new FormData();
-      
+
       // Append all files to the form data
       Array.from(files).forEach(file => {
         formData.append(type === 'property' ? 'images' : 'avatar', file);
@@ -52,7 +52,7 @@ export function ImageUpload({
 
       // Upload the images
       const endpoint = type === 'property' ? '/api/upload/property' : '/api/upload/profile';
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}${endpoint}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://real-estate-backend-bq2m.onrender.com'}${endpoint}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -65,16 +65,16 @@ export function ImageUpload({
       }
 
       const data = await response.json();
-      
+
       // Get the image URLs from the response
-      const uploadedImageUrls = type === 'property' 
+      const uploadedImageUrls = type === 'property'
         ? data.images.map((img: { url: string }) => img.url)
         : [data.image.url];
 
       // Update the state with the new images
       const newImages = [...images, ...uploadedImageUrls];
       setImages(newImages);
-      
+
       // Call the callback with the new images
       onImageUpload(newImages);
 
@@ -137,7 +137,7 @@ export function ImageUpload({
 
       {/* Upload area */}
       {images.length < maxImages && (
-        <div 
+        <div
           className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition-colors cursor-pointer"
           onClick={handleBrowseClick}
         >
@@ -150,8 +150,8 @@ export function ImageUpload({
             <>
               <Upload className="h-10 w-10 mx-auto text-gray-400 mb-4" />
               <p className="text-gray-500 mb-2">
-                {type === 'property' 
-                  ? 'Drag & drop property images here, or click to browse' 
+                {type === 'property'
+                  ? 'Drag & drop property images here, or click to browse'
                   : 'Click to upload your profile picture'}
               </p>
               <p className="text-gray-400 text-sm">
