@@ -13,7 +13,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-2 mb-4">
               <Home className="h-6 w-6 text-teal-400" />
               <span className="text-xl font-bold text-white font-poppins">
-                Home<span className="text-teal-400">Harbor</span>
+                BRICK<span className="text-teal-400">HIVE</span>
               </span>
             </Link>
             <p className="text-gray-400 text-sm mb-4">
@@ -117,14 +117,14 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Mail className="h-5 w-5 text-teal-400 shrink-0" />
-                <span className="text-gray-400">contact@homeharbor.com</span>
+                <span className="text-gray-400">contact@BRICKHIVE.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} HomeHarbor. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} BRICKHIVE. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -25,7 +25,7 @@ const Newsletter = () => {
       <div className="container">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            Stay Updated with HomeHarbor
+            Stay Updated with BRICKHIVE
           </h2>
           <p className="text-teal-100 mb-6">
             Subscribe to our newsletter for the latest property listings, market insights, and exclusive offers

@@ -183,7 +183,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           toast({
             title: 'Welcome!',
-            description: `Your account has been created successfully. Welcome to HomeHarbor, ${data.user.name}!`,
+            description: `Your account has been created successfully. Welcome to BRICKHIVE, ${data.user.name}!`,
           });
 
           return true;

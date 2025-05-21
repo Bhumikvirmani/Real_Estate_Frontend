@@ -43,7 +43,7 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-2">
             <Home className="h-6 w-6 text-teal-600" />
             <span className="text-xl font-bold text-teal-700 font-poppins">
-              Home<span className="text-teal-500">Harbor</span>
+              BRICK<span className="text-teal-500">HIVE</span>
             </span>
           </Link>
 
