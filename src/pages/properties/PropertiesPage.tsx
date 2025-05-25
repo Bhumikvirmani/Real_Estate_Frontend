@@ -5,6 +5,7 @@ import { PropertySearch } from '@/components/property/PropertySearch';
 import { PropertyCard } from '@/components/property/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { CustomPriceSlider } from '@/components/ui/CustomPriceSlider';
 import {
   Select,
   SelectContent,
@@ -14,6 +15,8 @@ import {
 } from "@/components/ui/select";
 import { useApi } from '@/hooks/useApi';
 import { Filter, Grid, List, MapPin } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Property {
   _id: string;
@@ -52,14 +55,16 @@ const PropertiesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'createdAt:desc');
+  const [priceRange, setPriceRange] = useState<[number, number]>([
+    Number(searchParams.get('price_min')) || 25000,
+    Number(searchParams.get('price_max')) || 1000000
+  ]);
   
   const query = searchParams.get('query') || '';
   const type = searchParams.get('type') || '';
   const status = searchParams.get('status') || '';
   const city = searchParams.get('city') || '';
   const page = Number(searchParams.get('page')) || 1;
-  const priceMin = searchParams.get('price_min');
-  const priceMax = searchParams.get('price_max');
   const bedrooms = searchParams.get('bedrooms');
   const bathrooms = searchParams.get('bathrooms');
   
@@ -92,6 +97,15 @@ const PropertiesPage = () => {
     setSearchParams(new URLSearchParams());
   };
 
+  // Handle price range changes
+  const handlePriceRangeChange = (newRange: [number, number]) => {
+    setPriceRange(newRange);
+    const params = new URLSearchParams(searchParams);
+    params.set('minPrice', newRange[0].toString());
+    params.set('maxPrice', newRange[1].toString());
+    setSearchParams(params);
+  };
+
   return (
     <Layout>
       <div className="container mx-auto py-8">
@@ -113,6 +127,23 @@ const PropertiesPage = () => {
                 </span>
               </div>
             )}
+          </div>
+
+          <div className="flex flex-col gap-4 w-full md:w-auto">
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <CustomPriceSlider
+                  value={priceRange}
+                  onChange={handlePriceRangeChange}
+                  min={25000}
+                  max={1000000}
+                  step={1000}
+                  className="w-full"
+                  showInputs={true}
+                  formatValue={(val) => `$${val.toLocaleString()}`}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
